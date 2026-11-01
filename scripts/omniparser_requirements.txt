@@ -1,0 +1,12 @@
+# Separate runtime: install torch 2.5.1 / torchvision 0.20.1 cu121 first.
+torch==2.5.1
+torchvision==0.20.1
+sympy==1.13.1
+numpy==1.26.4
+transformers==4.49.0
+huggingface-hub==0.29.3
+easyocr==1.7.2
+opencv-python-headless==4.10.0.84
+timm==1.0.15
+einops==0.8.1
+Pillow>=10.2,<12

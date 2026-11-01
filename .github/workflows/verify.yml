@@ -1,0 +1,40 @@
+name: Verify FLOTER
+# Runs only when started by hand from the Actions tab.
+on: workflow_dispatch
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        # floter.spec imports the package from its parent folder, so the checkout must be named floter.
+        working-directory: floter
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: floter
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_secrets.py
+      - run: python -m pip install -e ".[dev,voice,voice-light,browser]"
+      - run: python scripts/provision_voice.py
+      - run: python scripts/provision_whisper.py
+      - run: python -m pytest -q
+      - run: python scripts/collect_notices.py
+      - run: python -m build --wheel
+      - run: python -m PyInstaller --clean floter.spec --noconfirm
+      - run: python scripts/check_package.py
+      - name: Compile unsigned installer
+        shell: pwsh
+        run: |
+          $compiler = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          if (!(Test-Path -LiteralPath $compiler)) { choco install innosetup --no-progress -y }
+          if (!(Test-Path -LiteralPath $compiler)) { throw 'Install Inno Setup 6 on the build runner.' }
+          python scripts/build_installer.py --compiler "$compiler"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FLOTER-Windows
+          path: |
+            floter/dist/FLOTER/
+            floter/dist/installer/
+            floter/dist/*.whl

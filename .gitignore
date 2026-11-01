@@ -1,0 +1,46 @@
+# Private configuration and signing material
+.env
+.env.*
+!.env.example
+secrets/
+screts/
+*.pfx
+*.p12
+
+# Local environments, tools and models
+.venv/
+.tools/
+models/
+.publish/
+
+# Generated build and verification output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+.wheel-check/
+*.log
+acceptance-output/
+ui-*-preview.png
+ui-preview.png
+floter-debug.spec
+
+# Local historical material (not distributed)
+.cleanup-archive/
+application-paths.md
+
+# Never commit credentials or machine-specific data
+*.token
+client_secret*.json
+settings.bin
+applications*.json
+logs/
+voice_test_result.txt
+.claude/
+
+# Media projects and local working files (not part of the application)
+videos/
+.superpowers/
+docs/linkedin/
